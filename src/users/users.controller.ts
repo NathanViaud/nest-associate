@@ -1,23 +1,29 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { User } from './interfaces/users.interface';
+import { User } from './entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  findAll(): User[] {
+  findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string): User | undefined {
-    const user = this.usersService.findOne(id);
-    if (!user) {
-      throw new NotFoundException(`User with ID ${id} not found`);
-    }
+  findOne(@Param('id') id: string): Promise<User | null> {
+    return this.usersService.findOne(id);
+  }
 
-    return user;
+  @Post()
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.create(createUserDto);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string): Promise<void> {
+    return this.usersService.remove(id);
   }
 }

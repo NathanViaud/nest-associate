@@ -1,28 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './interfaces/users.interface';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [
-    {
-      id: '1',
-      name: 'John Doe',
-    },
-    {
-      id: '2',
-      name: 'Test',
-    },
-    {
-      id: '3',
-      name: 'Super',
-    },
-  ];
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
-  findOne(id: string): User | undefined {
-    return this.users.find((user) => user.id === id);
+  async findAll(): Promise<User[]> {
+    return this.usersRepository.find();
   }
 
-  findAll(): User[] {
-    return this.users;
+  findOne(id: string): Promise<User | null> {
+    return this.usersRepository.findOne({ where: { id } });
+  }
+
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const newUser = this.usersRepository.create({ ...createUserDto });
+    const savedUser = await this.usersRepository.save(newUser);
+    return plainToInstance(User, savedUser);
+  }
+
+  async remove(id: string): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }
