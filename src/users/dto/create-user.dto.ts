@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString, MinLength } from 'class-validator';
 import { UserRole } from './user-role.type';
 
 export class CreateUserDto {
@@ -10,6 +10,7 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
+  @MinLength(6, { message: 'Password must be at least 6 characters long' })
   password: string;
 
   @IsOptional()

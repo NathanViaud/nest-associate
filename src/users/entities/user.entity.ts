@@ -3,9 +3,12 @@ import {
   Column,
   Entity,
   CreateDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { UserRole } from '../dto/user-role.type';
 import { Exclude } from 'class-transformer';
+import { Interest } from 'src/interests/entities/interest.entity';
 
 @Entity()
 export class User {
@@ -27,4 +30,8 @@ export class User {
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
+
+  @ManyToMany(() => Interest, (interest) => interest.users)
+  @JoinTable()
+  interests: Interest[];
 }

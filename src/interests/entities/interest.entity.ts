@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import { User } from 'src/users/entities/user.entity';
 import { PrimaryGeneratedColumn, Column, Entity, ManyToMany } from 'typeorm';
 
@@ -9,6 +10,7 @@ export class Interest {
   @Column({ unique: true })
   name: string;
 
-  // @ManyToMany(() => User, (user) => user.interests)
-  // users: User[];
+  @Exclude()
+  @ManyToMany(() => User, (user) => user.interests)
+  users: User[];
 }

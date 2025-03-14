@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { InterestsService } from './interests.service';
 import { CreateInterestDto } from './dto/create-interest.dto';
-import { UpdateInterestDto } from './dto/update-interest.dto';
+// import { UpdateInterestDto } from './dto/update-interest.dto';
 
 @Controller('interests')
 export class InterestsController {
@@ -22,10 +22,10 @@ export class InterestsController {
     return this.interestsService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInterestDto: UpdateInterestDto) {
-    return this.interestsService.update(+id, updateInterestDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateInterestDto: UpdateInterestDto) {
+  //   return this.interestsService.update(+id, updateInterestDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
