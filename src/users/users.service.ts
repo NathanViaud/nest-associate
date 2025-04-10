@@ -16,6 +16,9 @@ export class UsersService {
   }
 
   async findOne(id: string): Promise<User | null> {
+    if (!id) {
+      return null;
+    }
     const user = await this.usersRepository.findOne({ where: { id } });
     return plainToInstance(User, user);
   }
